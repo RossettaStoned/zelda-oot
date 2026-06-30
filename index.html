@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ocarina">
+<meta name="theme-color" content="#0a1612">
+<title>Ocarina of Time — Guía</title>
+<link rel="manifest" href="./manifest.json">
+<style>
+  :root {
+    --bg:#0a1612;--bg2:#0f1f19;--bg3:#152a21;--surface:#1a3328;--surface2:#214031;
+    --border:rgba(212,175,55,0.12);--border2:rgba(212,175,55,0.25);
+    --gold:#D4AF37;--gold-dark:#A8842A;--gold-dim:rgba(212,175,55,0.15);
+    --green:#5DCA8A;--green-dim:rgba(93,202,138,0.15);
+    --blue:#5B9BD5;--blue-dim:rgba(91,155,213,0.15);
+    --red:#E0654D;--red-dim:rgba(224,101,77,0.15);
+    --purple:#9D7FE8;--purple-dim:rgba(157,127,232,0.15);
+    --text:#EDE9DC;--text2:#9C9685;--text3:#5C5848;
+    --safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom);--tab-h:60px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100%}
+  #header{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:calc(var(--safe-top) + 12px) 16px 12px;flex-shrink:0}
+  #header h1{font-size:20px;font-weight:600;color:var(--gold);letter-spacing:.3px}
+  #header p{font-size:12px;color:var(--text2);margin-top:1px}
+  #content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--tab-h) + var(--safe-bottom) + 16px)}
+  #tabs{position:fixed;bottom:0;left:0;right:0;height:calc(var(--tab-h) + var(--safe-bottom));background:var(--bg2);border-top:0.5px solid var(--border);display:flex;align-items:flex-start;padding-top:8px;padding-bottom:var(--safe-bottom);z-index:100}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;opacity:.45;transition:opacity .15s}
+  .tab.active{opacity:1}
+  .tab svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .tab span{font-size:9px;color:var(--gold);font-weight:500}
+  .screen{display:none}.screen.active{display:block}
+  .card{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;margin:0 16px 12px;overflow:hidden}
+  .card-header{padding:14px 16px 10px;border-bottom:0.5px solid var(--border)}
+  .card-header h3{font-size:15px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
+  .card-body{padding:12px 16px;font-size:13px;color:var(--text2);line-height:1.65}
+  .badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;letter-spacing:.3px}
+  .b-gold{background:var(--gold-dim);color:var(--gold)}
+  .b-green{background:var(--green-dim);color:var(--green)}
+  .b-blue{background:var(--blue-dim);color:var(--blue)}
+  .b-red{background:var(--red-dim);color:var(--red)}
+  .b-purple{background:var(--purple-dim);color:var(--purple)}
+  .hero{background:linear-gradient(160deg,#0a1612 0%,#152a21 55%,#1a2614 100%);padding:24px 16px 20px;margin-bottom:4px;border-bottom:0.5px solid var(--border)}
+  .hero-title{font-size:26px;font-weight:700;color:var(--gold);letter-spacing:.5px}
+  .hero-sub{font-size:12px;color:var(--green);margin:2px 0 10px}
+  .hero-desc{font-size:13px;color:var(--text2);line-height:1.6}
+  .subnav{display:flex;gap:8px;padding:12px 16px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .subnav::-webkit-scrollbar{display:none}
+  .subnav-btn{flex-shrink:0;padding:6px 14px;border-radius:16px;border:0.5px solid var(--border2);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;transition:all .15s;white-space:nowrap;-webkit-appearance:none}
+  .subnav-btn.active{background:var(--gold-dim);border-color:var(--gold-dark);color:var(--gold)}
+  .step-item{display:flex;gap:12px;padding:10px 16px;border-bottom:0.5px solid var(--border);align-items:flex-start}
+  .step-item:last-child{border-bottom:none}
+  .step-num{min-width:24px;height:24px;border-radius:50%;background:var(--gold-dim);color:var(--gold);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .step-text{font-size:13px;color:var(--text2);line-height:1.6}
+  .step-text strong{color:var(--text);font-weight:600}
+  .tip-box{background:var(--gold-dim);border-left:2px solid var(--gold-dark);border-radius:0 8px 8px 0;padding:10px 14px;margin:0 16px 10px;font-size:12px;color:var(--text2);line-height:1.6}
+  .tip-box strong{color:var(--text)}
+  .warn-box{background:var(--red-dim);border-left:2px solid var(--red);border-radius:0 8px 8px 0;padding:10px 14px;margin:0 16px 10px;font-size:12px;color:var(--text2);line-height:1.6}
+  .warn-box strong{color:var(--red)}
+  .secret-box{background:var(--green-dim);border-left:2px solid var(--green);border-radius:0 8px 8px 0;padding:10px 14px;margin:0 16px 10px;font-size:12px;color:var(--text2);line-height:1.6}
+  .secret-box strong{color:var(--green)}
+  .phase-label{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;padding:16px 16px 6px}
+  .area-card{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;margin:0 16px 10px;overflow:hidden}
+  .area-title{padding:12px 16px;background:var(--surface2);border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+  .area-title h4{font-size:14px;font-weight:600;color:var(--text)}
+  .area-title .chevron{color:var(--text3);font-size:12px;transition:transform .2s}
+  .area-title.open .chevron{transform:rotate(180deg)}
+  .area-body{display:none}
+  .area-body.open{display:block}
+  .area-section{padding:10px 16px;border-bottom:0.5px solid var(--border)}
+  .area-section:last-child{border-bottom:none}
+  .area-section-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px}
+  .area-section p{font-size:13px;color:var(--text2);line-height:1.6}
+  .area-section p+p{margin-top:6px}
+  .tag-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .item-tag{font-size:11px;padding:3px 9px;border-radius:8px;font-weight:500}
+  .it-item{background:var(--gold-dim);color:var(--gold)}
+  .it-enemy{background:var(--red-dim);color:var(--red)}
+  .it-puzzle{background:var(--blue-dim);color:var(--blue)}
+  .it-secret{background:var(--purple-dim);color:var(--purple)}
+  .boss-item{padding:12px 16px;border-bottom:0.5px solid var(--border)}
+  .boss-item:last-child{border-bottom:none}
+  .boss-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+  .boss-name{font-size:14px;font-weight:600;color:var(--text)}
+  .boss-tip{font-size:12px;color:var(--text2);line-height:1.55}
+  .char-row{display:flex;gap:12px;padding:12px 16px;border-bottom:0.5px solid var(--border);align-items:center}
+  .char-row:last-child{border-bottom:none}
+  .char-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+  .char-name{font-size:14px;font-weight:600;color:var(--text)}
+  .char-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5}
+  .stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px 16px}
+  .stat-box{background:var(--surface2);border-radius:10px;padding:10px;text-align:center}
+  .stat-num{font-size:22px;font-weight:700;color:var(--gold)}
+  .stat-label{font-size:10px;color:var(--text2);margin-top:2px}
+  .tracker-item{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:0.5px solid var(--border);cursor:pointer;-webkit-user-select:none;user-select:none}
+  .tracker-item:last-child{border-bottom:none}
+  .tracker-item:active{background:var(--surface2)}
+  .tracker-label{flex:1}
+  .tracker-name{font-size:13px;font-weight:500;color:var(--text)}
+  .tracker-sub{font-size:11px;color:var(--text2);margin-top:1px}
+  .toggle{width:44px;height:26px;border-radius:13px;background:var(--bg3);border:0.5px solid var(--border2);position:relative;flex-shrink:0;transition:background .2s}
+  .toggle.on{background:var(--gold-dark);border-color:var(--gold-dark)}
+  .toggle-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+  .toggle.on .toggle-knob{transform:translateX(18px)}
+  .song-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px}
+  .song-card{background:var(--surface2);border-radius:10px;padding:10px 12px;border:0.5px solid var(--border);cursor:pointer;transition:border-color .15s;-webkit-user-select:none;user-select:none}
+  .song-card.learned{border-color:var(--gold)}
+  .song-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+  .song-name{font-size:13px;font-weight:600;color:var(--text)}
+  .song-check{font-size:14px;opacity:0;transition:opacity .15s}
+  .song-card.learned .song-check{opacity:1}
+  .song-notes{font-size:13px;color:var(--gold);margin-bottom:2px;font-family:'SF Mono',monospace;letter-spacing:1px}
+  .song-effect{font-size:10px;color:var(--text3)}
+  .item-table{width:100%}
+  .item-row{display:flex;gap:10px;padding:9px 16px;border-bottom:0.5px solid var(--border);align-items:flex-start}
+  .item-row:last-child{border-bottom:none}
+  .item-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+  .item-info{flex:1}
+  .item-name{font-size:13px;font-weight:600;color:var(--text)}
+  .item-detail{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.5}
+  .item-where{font-size:10px;color:var(--text3);margin-top:3px}
+  .level-row{display:flex;align-items:center;padding:10px 16px;border-bottom:0.5px solid var(--border)}
+  .level-row:last-child{border-bottom:none}
+  .level-zone{flex:1;font-size:13px;color:var(--text2)}
+  .level-range{font-size:13px;font-weight:600;color:var(--gold)}
+  .story-check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;-webkit-user-select:none;user-select:none}
+  .story-checkbox{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--bg3)}
+  .story-checkbox.checked{background:var(--gold);border-color:var(--gold)}
+  .story-checkbox svg{width:13px;height:13px;stroke:var(--bg);stroke-width:3;opacity:0;transition:opacity .15s}
+  .story-checkbox.checked svg{opacity:1}
+  .story-check-content{flex:1}
+  .story-check.done .area-section-title{color:var(--gold)}
+  .story-check.done p{color:var(--text3);text-decoration:line-through;text-decoration-color:var(--text3)}
+  .heart-item{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border);cursor:pointer;-webkit-user-select:none;user-select:none}
+  .heart-item:last-child{border-bottom:none}
+  .heart-item:active{background:var(--surface2)}
+  .heart-checkbox{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border2);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--bg3)}
+  .heart-checkbox.checked{background:var(--gold);border-color:var(--gold)}
+  .heart-checkbox svg{width:12px;height:12px;stroke:var(--bg);stroke-width:3;opacity:0;transition:opacity .15s}
+  .heart-checkbox.checked svg{opacity:1}
+  .heart-content{flex:1}
+  .heart-name{font-size:13px;font-weight:600;color:var(--text)}
+  .heart-item.checked .heart-name{color:var(--text3);text-decoration:line-through}
+  .heart-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-top:2px}
+  .heart-item.checked .heart-desc{color:var(--text3)}
+  .section-header{padding:20px 16px 4px}
+  .section-header h2{font-size:22px;font-weight:700;color:var(--text)}
+  .section-header p{font-size:13px;color:var(--text2);margin-top:3px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header">
+    <h1>Ocarina of Time</h1>
+    <p>Guía completa · N64 · 1998</p>
+  </div>
+  <div id="content">
+
+    <!-- ===== GUIA ===== -->
+    <div id="screen-guia" class="screen active">
+      <div class="hero">
+        <div class="hero-title">Ocarina of Time</div>
+        <div class="hero-sub">Nintendo 64 · 1998 · Acción/Aventura</div>
+        <div class="hero-desc">Link viaja entre el pasado y el futuro de Hyrule para detener a Ganondorf y reunir las tres Piedras Espirituales que abren la Puerta del Tiempo.</div>
+      </div>
+      <div class="subnav">
+        <button class="subnav-btn active" onclick="showGuide('historia',this)">Historia</button>
+        <button class="subnav-btn" onclick="showGuide('personajes',this)">Personajes</button>
+        <button class="subnav-btn" onclick="showGuide('walkthrough',this)">Walkthrough</button>
+        <button class="subnav-btn" onclick="showGuide('tips',this)">Tips</button>
+      </div>
+
+      <!-- HISTORIA -->
+      <div id="gs-historia" class="guide-section">
+        <div class="card">
+          <div class="card-header"><h3>📖 Argumento</h3></div>
+          <div class="card-body">Link, un joven Kokiri sin hada guardiana, es llamado por el Gran Árbol Deku para enfrentar una maldición. Tras derrotarla, descubre que es el elegido para detener a <strong style="color:var(--text)">Ganondorf</strong>, el Rey Gerudo que busca apoderarse de la Trifuerza.<br><br>Link debe reunir las tres <strong style="color:var(--text)">Piedras Espirituales</strong> de Kokiri, Goron y Zora para abrir la Puerta del Tiempo en el Templo del Tiempo y tomar la Espada Maestra. Pero al hacerlo, se convierte en adulto y descubre que Ganondorf ya gobierna Hyrule siete años en el futuro. Ahora debe despertar a los <strong style="color:var(--text)">Seis Sabios</strong> y restaurar el equilibrio entre ambas líneas de tiempo.</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>🌍 Conceptos clave</h3></div>
+          <div class="step-item"><div class="step-num">⏳</div><div class="step-text"><strong>Viaje en el tiempo:</strong> Tras tomar la Espada Maestra, Link pasa 7 años dormido. Puede alternar entre Niño y Adulto tocando la Canción del Tiempo en el Templo del Tiempo.</div></div>
+          <div class="step-item"><div class="step-num">🔱</div><div class="step-text"><strong>Trifuerza:</strong> Reliquia sagrada dividida en tres partes: Poder (Ganondorf), Sabiduría (Zelda) y Valor (Link). Cada una representa una virtud de las diosas.</div></div>
+          <div class="step-item"><div class="step-num">🎵</div><div class="step-text"><strong>Ocarina del Tiempo:</strong> Instrumento mágico central del juego. Las canciones que aprendes permiten teletransportarte, cambiar el clima, manipular el tiempo y resolver puzzles.</div></div>
+          <div class="step-item"><div class="step-num">🧙</div><div class="step-text"><strong>Los Seis Sabios:</strong> Guardianes elementales que sellan el poder de Ganondorf: Saria (Bosque), Darunia (Fuego), Ruto (Agua), Impa (Sombra), Nabooru (Espíritu) y Rauru (Luz).</div></div>
+        </div>
+      </div>
+
+      <!-- PERSONAJES -->
+      <div id="gs-personajes" class="guide-section" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3>⚔️ Personajes principales</h3></div>
+          <div class="char-row">
+            <div class="char-avatar" style="background:var(--green-dim);color:var(--green)">LK</div>
+            <div><div class="char-name">Link</div><div class="char-desc">Protagonista. Joven Kokiri elegido por las diosas como Héroe del Tiempo. Porta la Trifuerza del Valor.</div></div>
+          </div>
+          <div class="char-row">
+            <div class="char-avatar" style="background:var(--gold-dim);color:var(--gold)">ZL</div>
+            <div><div class="char-name">Zelda / Sheik</div><div class="char-desc">Princesa de Hyrule. Se disfraza como el ninja Sheik durante 7 años para esconderse de Ganondorf. Porta la Trifuerza de la Sabiduría.</div></div>
+          </div>
+          <div class="char-row">
+            <div class="char-avatar" style="background:var(--blue-dim);color:var(--blue)">NV</div>
+            <div><div class="char-name">Navi</div><div class="char-desc">Hada compañera enviada por el Gran Árbol Deku. Guía a Link y da pistas en combate apuntando con Z-targeting.</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>💀 Antagonista</h3></div>
+          <div class="char-row">
+            <div class="char-avatar" style="background:var(--red-dim);color:var(--red)">GN</div>
+            <div><div class="char-name">Ganondorf</div><div class="char-desc">Rey de los Gerudo, posee la Trifuerza del Poder. Manipula a Link para que abra la Puerta del Tiempo y se proclama Rey de Hyrule. Jefe final como Ganon, su forma bestial.</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>🧙 Los Seis Sabios</h3></div>
+          <div class="char-row"><div class="char-avatar" style="background:var(--green-dim);color:var(--green)">SR</div><div><div class="char-name">Saria — Bosque</div><div class="char-desc">Mejor amiga de Link en Kokiri Forest. Sabia del Templo del Bosque.</div></div></div>
+          <div class="char-row"><div class="char-avatar" style="background:var(--red-dim);color:var(--red)">DR</div><div><div class="char-name">Darunia — Fuego</div><div class="char-desc">Líder Goron. Sabio del Templo de Fuego en el Cráter del Volcán.</div></div></div>
+          <div class="char-row"><div class="char-avatar" style="background:var(--blue-dim);color:var(--blue)">RT</div><div><div class="char-name">Ruto — Agua</div><div class="char-desc">Princesa Zora. Sabia del Templo del Agua en el Lago Hylia.</div></div></div>
+          <div class="char-row"><div class="char-avatar" style="background:var(--purple-dim);color:var(--purple)">IM</div><div><div class="char-name">Impa — Sombra</div><div class="char-desc">Niñera de Zelda, Sheikah. Sabia del Templo de las Sombras en Kakariko.</div></div></div>
+          <div class="char-row"><div class="char-avatar" style="background:var(--gold-dim);color:var(--gold)">NB</div><div><div class="char-name">Nabooru — Espíritu</div><div class="char-desc">Ladrona Gerudo. Sabia del Templo del Espíritu en el Desierto.</div></div></div>
+          <div class="char-row"><div class="char-avatar" style="background:var(--gold-dim);color:var(--gold)">RA</div><div><div class="char-name">Rauru — Luz</div><div class="char-desc">Sabio original. Reside en el Templo del Tiempo. Da la bienvenida a Link como adulto.</div></div></div>
+        </div>
+      </div>
+
+      <!-- WALKTHROUGH -->
+      <div id="gs-walkthrough" class="guide-section" style="display:none">
+        <div class="phase-label">Niño Link — Antes del tiempo</div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>🌲 Kokiri Forest & Árbol Deku</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story1" onclick="toggleStory('story1')"><div class="story-checkbox" id="sc-box-story1"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>Despierta en tu casa en el Bosque Kokiri. Habla con Saria, luego visita a Mido (el guardián que bloquea el camino) — necesitas una espada y escudo antes de pasar.</p>
+              <p>Consigue la <strong style="color:var(--text)">Espada Kokiri</strong> en la cueva del tronco hueco y el <strong style="color:var(--text)">Escudo Deku</strong> en la tienda del pueblo (20 rupias). Ahora Mido te deja pasar al Gran Árbol Deku.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Dentro del Árbol Deku (1er dungeon)</div>
+              <p>Usa el <strong style="color:var(--text)">Tirachinas Deku</strong> que encuentras dentro para activar interruptores a distancia. Las Gohma Larvae (arañas) caen del techo — golpéalas antes de que caigan sobre ti.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe: Gohma</div>
+              <p>Araña gigante con un ojo rojo en el abdomen. Usa el <strong style="color:var(--text)">Tirachinas</strong> para dispararle al ojo cuando lo abra, luego corre y ataca con espada mientras está aturdida.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">Recompensa</div>
+              <div class="tag-row"><span class="item-tag it-item">Piedra Espiritual Kokiri (Esmeralda)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>🏰 Castillo de Hyrule</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story2" onclick="toggleStory('story2')"><div class="story-checkbox" id="sc-box-story2"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>Viaja a la Pradera de Hyrule y entra al castillo por el jardín lateral, evitando guardias. Conoces a <strong style="color:var(--text)">Zelda</strong>, quien te pide espiar a Ganondorf desde el balcón.</p>
+              <p>Zelda te entrega la <strong style="color:var(--text)">Ocarina del Tiempo</strong> y te enseña la Canción de Zelda. Debes huir del castillo cuando Ganondorf te descubre.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Secreto</div>
+              <p>En el jardín de Hyrule hay una mujer (Malon) con un caballo. Háblale para más adelante poder aprender el <strong style="color:var(--text)">Canto de Epona</strong> en el Rancho Lon Lon.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>🏔️ Ciudad Goron & Cráter del Volcán</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story3" onclick="toggleStory('story3')"><div class="story-checkbox" id="sc-box-story3"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>En Ciudad Goron, los Goron están hambrientos y bloqueados por Link Goron. Consigue la <strong style="color:var(--text)">Sopa de Roca Azul</strong> de la tienda y dásela a Darunia para que baile y abra el paso.</p>
+              <p>Aprende la <strong style="color:var(--text)">Canción de Saria</strong> primero (en el Bosque) para encontrar a Darunia en el Cráter Death Mountain antes de entrar al dungeon.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Templo de Fuego (avance parcial)</div>
+              <p>En esta primera visita como niño solo accedes a una parte — necesitarás volver como adulto para completarlo. Consigue la <strong style="color:var(--text)">Piedra Espiritual Goron (Rubí)</strong> tras salvar a Darunia.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">Items</div>
+              <div class="tag-row"><span class="item-tag it-item">Bombas Deku</span><span class="item-tag it-item">Piedra Espiritual Goron</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>💧 Dominio Zora & Lago Hylia</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story4" onclick="toggleStory('story4')"><div class="story-checkbox" id="sc-box-story4"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>El Rey Zora bloquea el camino al Dominio. Encuentra el huevo perdido de Ruto en el Lago Hylia (un Zora azul te lo entrega tras devolver el anillo que ella tira al agua).</p>
+              <p>Sumérgete y rescata a Ruto, llévala de vuelta al Dominio. El Rey Zora abre el paso a <strong style="color:var(--text)">Lago Hylia</strong> donde está el Templo del Agua (parcialmente congelado en esta etapa).</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe: Barinade (Jabu-Jabu)</div>
+              <p>Dentro del estómago de Jabu-Jabu (el pez gigante). Usa el <strong style="color:var(--text)">Boomerang</strong> para cortar los tentáculos parásitos que protegen a Barinade, luego ataca el núcleo con espada.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">Recompensa</div>
+              <div class="tag-row"><span class="item-tag it-item">Piedra Espiritual Zora (Zafiro)</span><span class="item-tag it-item">Boomerang</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase-label">Templo del Tiempo — El salto a Adulto</div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>⏳ Puerta del Tiempo</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story5" onclick="toggleStory('story5')"><div class="story-checkbox" id="sc-box-story5"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>Con las 3 Piedras Espirituales, ve al <strong style="color:var(--text)">Templo del Tiempo</strong> en Ciudad de Hyrule. Coloca las piedras en sus altares — la Puerta del Tiempo se abre revelando el <strong style="color:var(--text)">Pedestal de la Espada Maestra</strong>.</p>
+              <p>Al tomar la espada, Ganondorf irrumpe y roba la Trifuerza del Templo. Link queda sellado por 7 años, despertando como <strong style="color:var(--text)">Adulto</strong>.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">⚠️ Importante</div>
+              <p>Desde aquí puedes alternar entre Niño y Adulto tocando la <strong style="color:var(--text)">Canción del Tiempo</strong> sobre el Pedestal de la Espada Maestra. Muchas sidequests requieren ir y volver entre edades.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase-label">Adulto Link — Hyrule bajo Ganondorf</div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>🌲 Templo del Bosque</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story6" onclick="toggleStory('story6')"><div class="story-checkbox" id="sc-box-story6"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>El Bosque Kokiri ahora tiene Lost Woods alterado con Skull Kid. El templo está en lo profundo del Bosque Perdido. Consigue el <strong style="color:var(--text)">Arco y Flecha</strong> antes de entrar — esencial para los ojos mágicos del templo.</p>
+              <p>El dungeon tiene una mecánica de <strong style="color:var(--text)">rotación de pasillos</strong>: derrota a los 4 Poe fantasmas en orden para alinear el corredor central.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Enemigos y secretos</div>
+              <div class="tag-row"><span class="item-tag it-enemy">Wallmaster</span><span class="item-tag it-enemy">Floormaster</span><span class="item-tag it-enemy">Stalfos</span><span class="item-tag it-secret">Pieza de Corazón tras puzzle de bloques</span></div>
+              <p style="margin-top:6px">Cuidado con los <strong style="color:var(--text)">Wallmasters</strong> en el pasillo de la entrada — te arrastran de vuelta al inicio del dungeon si te atrapan. En la sala circular con los 4 cuadros, dispara flecha a los ojos de las estatuas para revelar un cofre con Pieza de Corazón.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe: Phantom Ganon</div>
+              <p>Ataca desde dentro de cuadros en las paredes. Cuando salga del cuadro y lance bolas de energía, <strong style="color:var(--text)">devuélveselas con espada</strong> (timing perfecto) o dispárale con flecha.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">Items y recompensa</div>
+              <div class="tag-row"><span class="item-tag it-item">Medallón del Bosque</span><span class="item-tag it-item">Saria se vuelve Sabia</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>🌋 Templo de Fuego</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story7" onclick="toggleStory('story7')"><div class="story-checkbox" id="sc-box-story7"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>Darunia ahora es Sabio en peligro — Death Mountain Crater está activo con lava. El templo requiere <strong style="color:var(--text)">Botas de Hierro</strong> (consíguelas en Kakariko antes de entrar) para caminar sobre corrientes de aire y resistir vientos fuertes.</p>
+              <p>Usa el <strong style="color:var(--text)">Bumerán</strong> y bombas para activar interruptores a distancia entre plataformas de lava.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Enemigos y secretos</div>
+              <div class="tag-row"><span class="item-tag it-enemy">Torch Slug</span><span class="item-tag it-enemy">Flare Dancer</span><span class="item-tag it-enemy">Lizalfos</span><span class="item-tag it-secret">Pieza de Corazón en sala de bloques rodantes</span></div>
+              <p style="margin-top:6px">Los <strong style="color:var(--text)">Flare Dancer</strong> son enemigos fuertes — golpéalos con espada cuando se separen en llamas pequeñas. En el piso con los pilares de mármol, rompe el bloque dorado con el Hammer para revelar un atajo con Pieza de Corazón.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe: Volvagia</div>
+              <p>Dragón de lava que emerge de túneles. Espera a que asome la cabeza, golpéala con la <strong style="color:var(--text)">Megaton Hammer</strong> mientras está vulnerable. Cuidado con las rocas que caen.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">Items y recompensa</div>
+              <div class="tag-row"><span class="item-tag it-item">Medallón del Fuego</span><span class="item-tag it-item">Megaton Hammer</span><span class="item-tag it-item">Darunia se vuelve Sabio</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>💧 Templo del Agua</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story8" onclick="toggleStory('story8')"><div class="story-checkbox" id="sc-box-story8"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>El más complejo del juego. El Dominio Zora está congelado por King Zora (rómpelo con Bombas de Fuego del Goron Link niño). El templo está bajo el Lago Hylia — necesitas <strong style="color:var(--text)">Botas de Hierro + Aleta Zora</strong> para nadar y bucear.</p>
+              <p><strong style="color:var(--text)">Mecánica clave:</strong> el nivel del agua cambia con un interruptor central. Memoriza qué puertas se abren con cada nivel (alto/medio/bajo) — es fácil perderse aquí.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Enemigos y secretos</div>
+              <div class="tag-row"><span class="item-tag it-enemy">Spike (erizo)</span><span class="item-tag it-enemy">Dark Link</span><span class="item-tag it-enemy">Shabom</span><span class="item-tag it-secret">Pieza de Corazón tras subir el nivel de agua al máximo</span></div>
+              <p style="margin-top:6px"><strong style="color:var(--text)">Dark Link</strong> aparece en una sala secundaria — copia tus movimientos, así que cámbialos constantemente para confundirlo. En la sala central, sube el agua al nivel más alto para acceder a un cofre con Pieza de Corazón en el techo.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe: Morpha</div>
+              <p>Núcleo gelatinoso dentro de un tentáculo de agua. Usa el <strong style="color:var(--text)">Gancho/Hookshot</strong> para atraer el núcleo hacia ti y atacarlo con espada antes de que vuelva a sumergirse.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">Items y recompensa</div>
+              <div class="tag-row"><span class="item-tag it-item">Medallón del Agua</span><span class="item-tag it-item">Longshot (upgrade Hookshot)</span><span class="item-tag it-item">Ruto se vuelve Sabia</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>👻 Templo de las Sombras</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story9" onclick="toggleStory('story9')"><div class="story-checkbox" id="sc-box-story9"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>Detrás del cementerio de Kakariko, en lo profundo de Kakariko Well. El dungeon más oscuro y temático de terror del juego. Usa el <strong style="color:var(--text)">Ojo de la Verdad (Lente de la Verdad)</strong> para ver pasajes invisibles.</p>
+              <p>Cruza el río de lava/sangre en una balsa guiada por la <strong style="color:var(--text)">Canción del Sol</strong>. Evita las trampas de guadañas giratorias.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Enemigos y secretos</div>
+              <div class="tag-row"><span class="item-tag it-enemy">Floormaster</span><span class="item-tag it-enemy">Redead</span><span class="item-tag it-enemy">Like Like</span><span class="item-tag it-secret">Pieza de Corazón cruzando la sala invisible con Lente</span></div>
+              <p style="margin-top:6px">Los <strong style="color:var(--text)">Redead</strong> paralizan con su grito — toca la Ocarina inmediatamente para liberarte del miedo antes de que te muerdan. Hay un puente invisible solo visible con el Lente de la Verdad que lleva a una Pieza de Corazón escondida.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe: Bongo Bongo</div>
+              <p>Manos gigantes invisibles con un tambor. Usa el <strong style="color:var(--text)">Lente de la Verdad</strong> para verlo. Dispara flechas a las manos cuando tocan el tambor, luego ataca el ojo central.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">Items y recompensa</div>
+              <div class="tag-row"><span class="item-tag it-item">Medallón de las Sombras</span><span class="item-tag it-item">Impa se vuelve Sabia</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>🏜️ Templo del Espíritu</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story10" onclick="toggleStory('story10')"><div class="story-checkbox" id="sc-box-story10"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>En el Valle Gerudo, cruza el desierto siguiendo el rastro de polvo (usa Lente de la Verdad). El templo tiene forma de cabeza de Diosa — primero lo exploras como niño (sección pequeña) y luego como adulto (sección completa).</p>
+              <p>Usa <strong style="color:var(--text)">Bombas de Fuego de niño</strong> en estatuas, luego cambia a adulto con el Longshot para llegar a zonas altas.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Enemigos y secretos</div>
+              <div class="tag-row"><span class="item-tag it-enemy">Armos</span><span class="item-tag it-enemy">Anubis</span><span class="item-tag it-enemy">Iron Knuckle</span><span class="item-tag it-secret">Sala del espejo de sol — refleja luz para abrir puerta</span></div>
+              <p style="margin-top:6px">El <strong style="color:var(--text)">Iron Knuckle</strong> de la sala del tesoro es uno de los enemigos más duros del juego — apunta a su espalda cuando baje la guardia tras un combo. Usa espejos de Silver Rupee para reflejar el sol y abrir una puerta dorada con tesoro.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe: Twinrova</div>
+              <p>Dos brujas gemelas (Koume y Kotake) que alternan fuego y hielo. Refleja sus ataques con escudo de vuelta a la bruja correcta para fusionarlas en Twinrova, luego ataca con espada.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">Items y recompensa</div>
+              <div class="tag-row"><span class="item-tag it-item">Medallón del Espíritu</span><span class="item-tag it-item">Nabooru se vuelve Sabia</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase-label">Final — Castillo de Ganon</div>
+
+        <div class="area-card">
+          <div class="area-title" onclick="toggleArea(this)"><h4>🏯 Castillo de Ganon</h4><span class="chevron">▾</span></div>
+          <div class="area-body">
+            <div class="area-section"><div class="story-check" id="sc-wrap-story11" onclick="toggleStory('story11')"><div class="story-checkbox" id="sc-box-story11"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="story-check-content"><div class="area-section-title">Qué hacer</div><p>Con los 6 Medallones, Rauru abre el camino al castillo flotante de Ganondorf. El dungeon final combina puzzles de todos los templos anteriores en una torre ascendente.</p>
+              <p>Cada piso requiere un item específico de los templos previos: Hookshot, Hammer, Bombas, arco. Prepara stock de pociones antes de subir.</p>
+            </div></div></div>
+            <div class="area-section">
+              <div class="area-section-title">Enemigos y trampas</div>
+              <div class="tag-row"><span class="item-tag it-enemy">Stalfos élite</span><span class="item-tag it-enemy">Iron Knuckle Black</span><span class="item-tag it-puzzle">Puzzle de espejos de luz</span></div>
+              <p style="margin-top:6px">El último piso antes de Ganondorf tiene un puzzle con el <strong style="color:var(--text)">Prelude of Light</strong> y espejos — dirige la luz hasta el cristal central para abrir la puerta del trono.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe: Ganondorf</div>
+              <p>Toca el órgano y lanza bolas de energía oscura — <strong style="color:var(--text)">devuélveselas con espada</strong> en el momento justo, igual que Phantom Ganon. Tras varios golpes el castillo colapsa.</p>
+            </div>
+            <div class="area-section">
+              <div class="area-section-title">⚔️ Jefe Final: Ganon</div>
+              <p>Forma bestial en las ruinas del castillo. Zelda te da la Espada de Luz para aturdirlo. Cuando esté en el suelo, ataca su cola repetidamente con espada hasta derrotarlo definitivamente.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIPS -->
+      <div id="gs-tips" class="guide-section" style="display:none">
+        <div style="height:8px"></div>
+        <div class="tip-box"><strong>Z-Targeting:</strong> Mantén Z para fijar la cámara en un enemigo u objeto. Esencial para esquivar, apuntar y resolver puzzles de cámara en templos.</div>
+        <div class="tip-box"><strong>Corazones de contenedor:</strong> Hay 4 Piezas de Corazón ocultas por cada Contenedor de Corazón completo. Completa sidequests de pueblos para encontrarlas todas.</div>
+        <div class="warn-box"><strong>Antes del Templo del Tiempo:</strong> Completa todas las sidequests de Niño Link que quieras — varias zonas y NPCs cambian para siempre tras el salto de 7 años.</div>
+        <div class="secret-box"><strong>Rancho Lon Lon:</strong> Aprende el Canto de Epona de niño cantándole a Malon repetidamente. Como adulto podrás llamar e invocar tu caballo en cualquier campo abierto.</div>
+        <div class="tip-box"><strong>Lente de la Verdad:</strong> Consume Rupias por segundo de uso. Cómpralo en la Casa de Subastas de Kakariko (Adulto) tras completar la sidequest de las Piezas de Corazón Big Poe.</div>
+        <div class="warn-box"><strong>Templo del Agua:</strong> Es el más confuso del juego por el sistema de niveles de agua. Lleva un mapa mental: nivel alto abre puertas superiores, nivel bajo revela el sótano.</div>
+        <div class="card" style="margin-top:4px">
+          <div class="card-header"><h3>📊 Orden recomendado de templos (Adulto)</h3></div>
+          <div class="level-row"><div class="level-zone">Templo del Bosque</div><div class="level-range">1°</div></div>
+          <div class="level-row"><div class="level-zone">Templo de Fuego</div><div class="level-range">2°</div></div>
+          <div class="level-row"><div class="level-zone">Templo del Agua</div><div class="level-range">3°</div></div>
+          <div class="level-row"><div class="level-zone">Templo de las Sombras</div><div class="level-range">4°</div></div>
+          <div class="level-row"><div class="level-zone">Templo del Espíritu</div><div class="level-range">5°</div></div>
+          <div class="level-row"><div class="level-zone">Castillo de Ganon</div><div class="level-range">Final</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TEMPLOS ===== -->
+    <div id="screen-templos" class="screen">
+      <div class="section-header"><h2>Templos y jefes</h2><p>Las 9 mazmorras del juego</p></div>
+      <div class="card">
+        <div class="card-header"><h3>🏛️ Guía rápida de jefes</h3></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Gohma</span><span class="badge b-green">Árbol Deku</span></div><div class="boss-tip">Dispara con Tirachinas al ojo cuando lo abre, luego ataca con espada mientras está aturdida.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">King Dodongo</span><span class="badge b-red">Caverna Dodongo</span></div><div class="boss-tip">Lánzale bombas a la boca cuando inhale, luego ataca mientras está aturdido. Evita su ataque rodante.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Barinade</span><span class="badge b-blue">Jabu-Jabu</span></div><div class="boss-tip">Corta los tentáculos con Boomerang, luego ataca el núcleo flotante con espada.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Phantom Ganon</span><span class="badge b-green">Templo del Bosque</span></div><div class="boss-tip">Devuelve sus bolas de energía con espada en el timing correcto, o dispárale con arco.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Volvagia</span><span class="badge b-red">Templo de Fuego</span></div><div class="boss-tip">Golpéalo con Megaton Hammer cuando saque la cabeza de los túneles de lava.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Morpha</span><span class="badge b-blue">Templo del Agua</span></div><div class="boss-tip">Atrae el núcleo con Hookshot/Longshot y ataca con espada antes de que se sumerja.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Bongo Bongo</span><span class="badge b-purple">Templo de las Sombras</span></div><div class="boss-tip">Usa Lente de la Verdad para verlo. Dispara a las manos, luego ataca el ojo central.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Twinrova</span><span class="badge b-gold">Templo del Espíritu</span></div><div class="boss-tip">Refleja sus hechizos con escudo de vuelta a la bruja correcta, luego ataca cuando se fusionen.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Ganondorf / Ganon</span><span class="badge b-red">Castillo de Ganon</span></div><div class="boss-tip">Devuelve sus ataques de energía con espada. En la forma Ganon, aturde y ataca la cola repetidamente.</div></div>
+      </div>
+      <div class="tip-box"><strong>Items clave por templo:</strong> cada dungeon te da un item permanente (Boomerang, Hookshot, Hammer, Lente de la Verdad) necesario para avanzar en templos posteriores y en el Castillo de Ganon final.</div>
+    </div>
+
+    <!-- ===== ITEMS ===== -->
+    <div id="screen-items" class="screen">
+      <div class="section-header"><h2>Items y canciones</h2><p>Equipo y ocarina</p></div>
+      <div class="subnav">
+        <button class="subnav-btn active" onclick="showItems('canciones',this)">Canciones</button>
+        <button class="subnav-btn" onclick="showItems('equipo',this)">Equipo</button>
+        <button class="subnav-btn" onclick="showItems('piedras',this)">Piedras y Medallones</button>
+      </div>
+
+      <div id="items-canciones" class="items-tab">
+        <div class="card">
+          <div class="card-header"><h3>🎵 Canciones de la Ocarina</h3></div>
+          <div class="card-body" style="padding-bottom:4px">Las direcciones del C-stick: ⬆️ Arriba · ⬇️ Abajo · ⬅️ Izquierda · ➡️ Derecha · A (centro)</div>
+        </div>
+        <div class="song-grid" id="song-grid-static">
+          <div class="song-card"><div class="song-top"><span class="song-name">Zelda's Lullaby</span></div><div class="song-notes">⬆️ ➡️ ⬇️ ⬆️ ➡️ ⬇️</div><div class="song-effect">Abre puertas reales · Castillo Hyrule</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Epona's Song</span></div><div class="song-notes">⬆️ ⬅️ ➡️ ⬆️ ⬅️ ➡️</div><div class="song-effect">Llama a tu caballo Epona</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Saria's Song</span></div><div class="song-notes">⬇️ ➡️ ⬅️ ⬇️ ➡️ ⬅️</div><div class="song-effect">Llama a Saria / Darunia</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Sun's Song</span></div><div class="song-notes">➡️ ⬆️ ⬇️ ➡️ ⬆️ ⬇️</div><div class="song-effect">Cambia día/noche · Aturde Gibdos</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Song of Time</span></div><div class="song-notes">➡️ ⬆️ ➡️ ⬆️</div><div class="song-effect">Abre Puerta del Tiempo · Mueve bloques</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Song of Storms</span></div><div class="song-notes">⬅️ A ⬇️ ⬅️ A ⬇️</div><div class="song-effect">Invoca lluvia · Hace crecer plantas</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Minuet of Forest</span></div><div class="song-notes">A ⬆️ ⬅️ ➡️ ⬆️</div><div class="song-effect">Teletransporta al Templo del Bosque</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Bolero of Fire</span></div><div class="song-notes">⬇️ ➡️ ⬇️ ➡️ ⬆️ ⬇️ ⬆️ ⬇️</div><div class="song-effect">Teletransporta al Templo de Fuego</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Serenade of Water</span></div><div class="song-notes">⬇️ A ⬇️ ➡️ A</div><div class="song-effect">Teletransporta al Templo del Agua</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Nocturne of Shadow</span></div><div class="song-notes">⬅️ ➡️ ⬇️ A ⬇️ A</div><div class="song-effect">Teletransporta al Templo de Sombras</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Requiem of Spirit</span></div><div class="song-notes">A ⬇️ ➡️ A ⬇️ ➡️</div><div class="song-effect">Teletransporta al Templo del Espíritu</div></div>
+          <div class="song-card"><div class="song-top"><span class="song-name">Prelude of Light</span></div><div class="song-notes">⬆️ ➡️ A ⬆️ ➡️ A</div><div class="song-effect">Teletransporta al Templo del Tiempo</div></div>
+        </div>
+      </div>
+
+      <div id="items-equipo" class="items-tab" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3>⚔️ Equipo y armas</h3></div>
+          <div class="item-row"><div class="item-icon">🗡️</div><div class="item-info"><div class="item-name">Espada Kokiri</div><div class="item-detail">Espada inicial. Encuéntrala en la cueva del tronco del Bosque Kokiri.</div><div class="item-where">Cueva inicial · Niño Link</div></div></div>
+          <div class="item-row"><div class="item-icon">⚔️</div><div class="item-info"><div class="item-name">Espada Maestra</div><div class="item-detail">Espada legendaria que solo el portador de la Trifuerza del Valor puede empuñar. Te convierte en adulto al tomarla.</div><div class="item-where">Pedestal · Templo del Tiempo</div></div></div>
+          <div class="item-row"><div class="item-icon">🛡️</div><div class="item-info"><div class="item-name">Escudo Deku</div><div class="item-detail">Escudo de madera inicial. Se quema con fuego.</div><div class="item-where">Tienda Bosque Kokiri</div></div></div>
+          <div class="item-row"><div class="item-icon">🛡️</div><div class="item-info"><div class="item-name">Escudo Hyliano</div><div class="item-detail">Escudo metálico de Adulto. Resistente al fuego.</div><div class="item-where">Tienda Mercado / Kakariko</div></div></div>
+          <div class="item-row"><div class="item-icon">🎯</div><div class="item-info"><div class="item-name">Tirachinas Deku</div><div class="item-detail">Arma a distancia de Niño Link. Clave contra Gohma.</div><div class="item-where">Interior Árbol Deku</div></div></div>
+          <div class="item-row"><div class="item-icon">🏹</div><div class="item-info"><div class="item-name">Arco y Flecha Fairy</div><div class="item-detail">Arma a distancia de Adulto Link. Esencial para Phantom Ganon y Bongo Bongo.</div><div class="item-where">Templo del Bosque</div></div></div>
+          <div class="item-row"><div class="item-icon">🪃</div><div class="item-info"><div class="item-name">Boomerang</div><div class="item-detail">Aturde enemigos y recoge items a distancia. Clave contra Barinade.</div><div class="item-where">Interior de Jabu-Jabu</div></div></div>
+          <div class="item-row"><div class="item-icon">🪝</div><div class="item-info"><div class="item-name">Hookshot / Longshot</div><div class="item-detail">Gancho de agarre. Longshot tiene mayor alcance. Esencial para Templo del Agua y exploración vertical.</div><div class="item-where">Templo del Agua (upgrade)</div></div></div>
+          <div class="item-row"><div class="item-icon">🔨</div><div class="item-info"><div class="item-name">Megaton Hammer</div><div class="item-detail">Martillo pesado. Rompe rocas doradas y golpea interruptores grandes. Clave contra Volvagia.</div><div class="item-where">Templo de Fuego</div></div></div>
+          <div class="item-row"><div class="item-icon">👁️</div><div class="item-info"><div class="item-name">Lente de la Verdad</div><div class="item-detail">Revela objetos invisibles y pasajes ocultos. Consume Rupias mientras está activo. Esencial en Templo de Sombras.</div><div class="item-where">Casa de Subastas Kakariko</div></div></div>
+          <div class="item-row"><div class="item-icon">👢</div><div class="item-info"><div class="item-name">Botas de Hierro</div><div class="item-detail">Te hunden en el agua para bucear y te anclan contra vientos fuertes.</div><div class="item-where">Templo de Fuego (antes de entrar)</div></div></div>
+          <div class="item-row"><div class="item-icon">🦈</div><div class="item-info"><div class="item-name">Aleta Zora</div><div class="item-detail">Permite nadar rápido y bucear sin límite de tiempo bajo el agua.</div><div class="item-where">Rey Zora · Dominio Zora</div></div></div>
+        </div>
+      </div>
+
+      <div id="items-piedras" class="items-tab" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3>💎 Piedras Espirituales</h3></div>
+          <div class="item-row"><div class="item-icon">💚</div><div class="item-info"><div class="item-name">Esmeralda Kokiri</div><div class="item-detail">Otorgada por el Gran Árbol Deku tras derrotar a Gohma.</div><div class="item-where">Árbol Deku</div></div></div>
+          <div class="item-row"><div class="item-icon">❤️</div><div class="item-info"><div class="item-name">Rubí Goron</div><div class="item-detail">Otorgada por Darunia tras salvar a los Goron del hambre.</div><div class="item-where">Ciudad Goron</div></div></div>
+          <div class="item-row"><div class="item-icon">💙</div><div class="item-info"><div class="item-name">Zafiro Zora</div><div class="item-detail">Otorgada por el Rey Zora tras derrotar a Barinade y rescatar a Ruto.</div><div class="item-where">Dominio Zora</div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>✨ Medallones de los Sabios</h3></div>
+          <div class="item-row"><div class="item-icon">🟢</div><div class="item-info"><div class="item-name">Medallón del Bosque</div><div class="item-detail">Otorgado por Saria al volverse Sabia tras Phantom Ganon.</div><div class="item-where">Templo del Bosque</div></div></div>
+          <div class="item-row"><div class="item-icon">🔴</div><div class="item-info"><div class="item-name">Medallón de Fuego</div><div class="item-detail">Otorgado por Darunia al volverse Sabio tras Volvagia.</div><div class="item-where">Templo de Fuego</div></div></div>
+          <div class="item-row"><div class="item-icon">🔵</div><div class="item-info"><div class="item-name">Medallón del Agua</div><div class="item-detail">Otorgado por Ruto al volverse Sabia tras Morpha.</div><div class="item-where">Templo del Agua</div></div></div>
+          <div class="item-row"><div class="item-icon">🟣</div><div class="item-info"><div class="item-name">Medallón de las Sombras</div><div class="item-detail">Otorgado por Impa al volverse Sabia tras Bongo Bongo.</div><div class="item-where">Templo de las Sombras</div></div></div>
+          <div class="item-row"><div class="item-icon">🟠</div><div class="item-info"><div class="item-name">Medallón del Espíritu</div><div class="item-detail">Otorgado por Nabooru al volverse Sabia tras Twinrova.</div><div class="item-where">Templo del Espíritu</div></div></div>
+          <div class="item-row"><div class="item-icon">🟡</div><div class="item-info"><div class="item-name">Medallón de la Luz</div><div class="item-detail">Otorgado por Rauru en el Templo del Tiempo al inicio de la etapa Adulto.</div><div class="item-where">Templo del Tiempo</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TRACKER ===== -->
+    <div id="screen-tracker" class="screen">
+      <div class="section-header"><h2>Tracker</h2><p>Tu progreso en Hyrule</p></div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-num" id="stat-story">0/11</div><div class="stat-label">Pasos historia</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-templos">0</div><div class="stat-label">Templos</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-canciones">0</div><div class="stat-label">Canciones</div></div>
+      </div>
+      <div class="subnav">
+        <button class="subnav-btn active" onclick="showTracker('templos',this)">Templos</button>
+        <button class="subnav-btn" onclick="showTracker('canciones',this)">Canciones</button>
+        <button class="subnav-btn" onclick="showTracker('piedras',this)">Piedras</button>
+      </div>
+      <div id="tracker-templos" class="tracker-tab">
+        <div class="card"><div class="card-header"><h3>🏛️ Templos completados</h3></div><div id="templo-list"></div></div>
+      </div>
+      <div id="tracker-canciones" class="tracker-tab" style="display:none">
+        <div class="card"><div class="card-header"><h3>🎵 Canciones aprendidas</h3></div><div id="cancion-list"></div></div>
+      </div>
+      <div id="tracker-piedras" class="tracker-tab" style="display:none">
+        <div class="card"><div class="card-header"><h3>💎 Piedras y Medallones</h3></div><div id="piedra-list"></div></div>
+      </div>
+    </div>
+
+    <!-- ===== SIDEQUESTS ===== -->
+    <div id="screen-side" class="screen">
+      <div class="section-header"><h2>Sidequests</h2><p>Contenido opcional y 100%</p></div>
+      <div class="subnav">
+        <button class="subnav-btn active" onclick="showSide('corazones',this)">Piezas Corazón</button>
+        <button class="subnav-btn" onclick="showSide('mascaras',this)">Máscaras</button>
+        <button class="subnav-btn" onclick="showSide('skulltulas',this)">Gold Skulltulas</button>
+        <button class="subnav-btn" onclick="showSide('subastas',this)">Subastas/Poes</button>
+        <button class="subnav-btn" onclick="showSide('pesca',this)">Pesca y minijuegos</button>
+      </div>
+
+      <!-- PIEZAS DE CORAZON -->
+      <div id="side-corazones" class="side-tab">
+        <div class="card">
+          <div class="card-header"><h3>❤️ Las 36 Piezas de Corazón</h3></div>
+          <div class="card-body" style="padding-bottom:4px">El juego tiene 36 Piezas de Corazón en total (9 Contenedores extra). Aquí tienes 33 verificadas y organizadas por zona — las 3 restantes son variantes menores de minijuegos (premios rotativos de Bombchu Bowling, cofres adicionales) que pueden variar ligeramente entre versiones del juego. Toca cada una para marcarla como obtenida.</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3 style="color:var(--gold)">🌲 Bosque Kokiri / Lost Woods · Niño</h3></div>
+          <div id="hp-bosque"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3 style="color:var(--gold)">🏰 Hyrule Field / Mercado / Lon Lon · Niño y Adulto</h3></div>
+          <div id="hp-hyrule"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3 style="color:var(--gold)">⚰️ Kakariko / Cementerio · Niño y Adulto</h3></div>
+          <div id="hp-kakariko"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3 style="color:var(--gold)">🌋 Death Mountain / Goron City · Niño y Adulto</h3></div>
+          <div id="hp-goron"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3 style="color:var(--gold)">💧 Río y Dominio Zora · Niño y Adulto</h3></div>
+          <div id="hp-zora"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3 style="color:var(--gold)">🏞️ Lago Hylia · Niño y Adulto</h3></div>
+          <div id="hp-lago"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3 style="color:var(--gold)">🏜️ Valle y Fuerte Gerudo / Desierto · Adulto</h3></div>
+          <div id="hp-gerudo"></div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Varias piezas requieren plantar Magic Beans como Niño en un punto específico y volver como Adulto a montarlas — si avanzas en la historia sin plantarlas a tiempo, tendrás que esperar a un New Game+ o gestionar bien tus viajes en el tiempo.</div>
+        <div class="warn-box"><strong>Antes del Templo del Tiempo:</strong> Compra todos los Magic Beans posibles (Bean Salesman en Zora's River) y plántalos en sus 10 ubicaciones antes de convertirte en Adulto — varios de ellos solo se pueden plantar de Niño.</div>
+      </div>
+
+      <!-- MASCARAS / TRADING SEQUENCE -->
+      <div id="side-mascaras" class="side-tab" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3>🎭 Trading Sequence — Máscaras (Niño)</h3></div>
+          <div class="card-body">Secuencia de intercambio que empieza tras conseguir la Máscara de Conejo Gratis de la Casa de Máscaras en Hyrule Market.</div>
+        </div>
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Máscara de Conejo:</strong> Gana la carrera de Conejos cerca del Mercado para quedártela gratis.</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>Máscara Skull:</strong> Dásela al niño de Kokiri Forest llamado Skull Kid para conseguir la Máscara de Skull.</div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Máscara de Espantapájaros:</strong> Úsala con los Business Scrubs del Bosque Perdido para conseguir la Máscara Spooky.</div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text"><strong>Máscara de Calavera:</strong> Llévala a Dampé en el cementerio de Kakariko.</div></div>
+        <div class="step-item"><div class="step-num">5</div><div class="step-text"><strong>Máscara de Keaton:</strong> Muéstrasela al zorro Keaton cerca del puente de Kokiri Forest.</div></div>
+        <div class="step-item"><div class="step-num">6</div><div class="step-text"><strong>Máscara de Bunny Hood (final):</strong> Tras completar el ciclo, la tienda de máscaras te regala la Bunny Hood — aumenta velocidad de movimiento permanentemente.</div></div>
+        <div class="card" style="margin-top:4px">
+          <div class="card-header"><h3>🔄 Trading Sequence de Adulto — Cadena de items</h3></div>
+          <div class="card-body">Empieza tras el Templo del Bosque. Cada NPC requiere el item anterior y entrega el siguiente.</div>
+        </div>
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Pollo Cucco:</strong> Recíbelo de Anju en el gallinero de Kakariko.</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>Huevo Cocido:</strong> Cámbialo en la casa de al lado por un huevo que eclosiona en Cucco.</div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Guante Goron (Bracelet):</strong> Entrega el Cucco a un Goron hambriento en Death Mountain Trail.</div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text"><strong>Espada Rota Gorona:</strong> Dale el Bracelet/Eyedrops a Biggoron en la cima de Death Mountain.</div></div>
+        <div class="step-item"><div class="step-num">5</div><div class="step-text"><strong>Espada Biggoron (final):</strong> Lleva la espada rota a herrero en Kakariko, espera 3 días de juego, recoge la mejor espada del juego — reemplaza el escudo en combo pero hace daño masivo.</div></div>
+        <div class="warn-box"><strong>Importante:</strong> La Trading Sequence de Adulto es secuencial y de un solo uso por partida — no puedes recuperar items intermedios si avanzas mal. Sigue el orden exacto.</div>
+      </div>
+
+      <!-- GOLD SKULLTULAS -->
+      <div id="side-skulltulas" class="side-tab" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3>🕷️ Gold Skulltulas (100 totales)</h3></div>
+          <div class="card-body">Arañas doradas escondidas por todo Hyrule. Cada 10, 20, 30... que entregues a los Hermanos Skulltula en Kakariko da una recompensa.</div>
+        </div>
+        <div class="level-row"><div class="level-zone">Bosque Kokiri / Lost Woods</div><div class="level-range">~12</div></div>
+        <div class="level-row"><div class="level-zone">Hyrule Field</div><div class="level-range">~8</div></div>
+        <div class="level-row"><div class="level-zone">Kakariko Village</div><div class="level-range">~10</div></div>
+        <div class="level-row"><div class="level-zone">Death Mountain / Goron City</div><div class="level-range">~10</div></div>
+        <div class="level-row"><div class="level-zone">Dominio / Río Zora</div><div class="level-range">~10</div></div>
+        <div class="level-row"><div class="level-zone">Lago Hylia</div><div class="level-range">~8</div></div>
+        <div class="level-row"><div class="level-zone">Valle / Fuerte Gerudo</div><div class="level-range">~10</div></div>
+        <div class="level-row"><div class="level-zone">Desierto Colossus</div><div class="level-range">~8</div></div>
+        <div class="level-row"><div class="level-zone">Dentro de Templos</div><div class="level-range">~24</div></div>
+        <div class="card" style="margin-top:4px">
+          <div class="card-header"><h3>🏆 Recompensas por cantidad</h3></div>
+          <div class="item-row"><div class="item-icon">💰</div><div class="item-info"><div class="item-name">10 Skulltulas</div><div class="item-detail">Bolsa de Rupias Adultas (Wallet Adult, 200 rupias)</div></div></div>
+          <div class="item-row"><div class="item-icon">💰</div><div class="item-info"><div class="item-name">20 Skulltulas</div><div class="item-detail">Bolsa de Semillas Deku ampliada</div></div></div>
+          <div class="item-row"><div class="item-icon">💰</div><div class="item-info"><div class="item-name">30 Skulltulas</div><div class="item-detail">Carcaj de flechas ampliado (Quiver)</div></div></div>
+          <div class="item-row"><div class="item-icon">💰</div><div class="item-info"><div class="item-name">40 Skulltulas</div><div class="item-detail">Bombchu Bag</div></div></div>
+          <div class="item-row"><div class="item-icon">💰</div><div class="item-info"><div class="item-name">50 Skulltulas</div><div class="item-detail">Giant Wallet (500 rupias)</div></div></div>
+          <div class="item-row"><div class="item-icon">⭐</div><div class="item-info"><div class="item-name">100 Skulltulas</div><div class="item-detail">Huevo Dorado / Tunic Goron+Zora gratis en tiendas — la recompensa máxima</div></div></div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Usa la Canción del Sol cerca de tumbas y la Lente de la Verdad en zonas oscuras — muchas Skulltulas están escondidas en paredes o techos invisibles a simple vista.</div>
+      </div>
+
+      <!-- SUBASTAS / BIG POES -->
+      <div id="side-subastas" class="side-tab" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3>🏚️ Casa de Subastas de Hyrule Field</h3></div>
+          <div class="card-body">Ubicada en Hyrule Field (Adulto). Vende objetos especiales a cambio de Rupias o ítems coleccionables.</div>
+        </div>
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Lente de la Verdad:</strong> Cómpralo aquí por 100 Rupias tras la sidequest inicial de la Casa de Subastas.</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>Big Poe Hunt:</strong> Caza Big Poes a caballo en Hyrule Field de noche (fantasmas grandes que flotan). Atrápalos con arco mientras cabalgas con Epona.</div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Vende los Big Poes:</strong> Cada Big Poe se vende por Rupias crecientes. El décimo Big Poe entregado otorga una Pieza de Corazón especial.</div></div>
+        <div class="tip-box"><strong>Tip:</strong> Los Big Poes solo aparecen de noche en Hyrule Field. Necesitas Epona y buena puntería con arco a caballo — practica el control de cámara mientras galopas.</div>
+      </div>
+
+      <!-- PESCA Y MINIJUEGOS -->
+      <div id="side-pesca" class="side-tab" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3>🎣 Pesca (Fishing Pond)</h3></div>
+          <div class="card-body">Ubicado junto al Lago Hylia. Cuesta 20 Rupias por sesión de pesca. Versión Niño y Adulto tienen peces distintos.</div>
+        </div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Pez Niño (récord)</span><span class="badge b-gold">~10kg+</span></div><div class="boss-tip">Usa la caña básica del estanque. El premio es una Pieza de Corazón al superar el récord.</div></div>
+        <div class="boss-item"><div class="boss-top"><span class="boss-name">Pez Adulto (récord)</span><span class="badge b-blue">~13kg+</span></div><div class="boss-tip">El agua está más baja como adulto — hay un pez legendario escondido bajo la cascada, solo pescable con la Sinking Lure (señuelo especial).</div></div>
+        <div class="card" style="margin-top:4px">
+          <div class="card-header"><h3>🎮 Otros minijuegos</h3></div>
+          <div class="item-row"><div class="item-icon">🎯</div><div class="item-info"><div class="item-name">Galería de Tiro (Bow)</div><div class="item-detail">Mercado de Hyrule, Adulto. Acierta blancos para ganar Carcaj de flechas más grande.</div></div></div>
+          <div class="item-row"><div class="item-icon">🎯</div><div class="item-info"><div class="item-name">Galería de Tiro (Slingshot)</div><div class="item-detail">Mercado de Hyrule, Niño. Mismo minijuego con Tirachinas para Bolsa de Semillas Deku.</div></div></div>
+          <div class="item-row"><div class="item-icon">🐎</div><div class="item-info"><div class="item-name">Carrera de obstáculos Lon Lon</div><div class="item-detail">Salta las vallas con Epona en el tiempo límite para ganar Rupias y un cofre escondido.</div></div></div>
+          <div class="item-row"><div class="item-icon">🎲</div><div class="item-info"><div class="item-name">Casa de Apuestas (Mercado)</div><div class="item-detail">Adivina cuál Cucco esconde el premio. Ganar otorga acceso al Adult's Wallet anticipado.</div></div></div>
+          <div class="item-row"><div class="item-icon">🌙</div><div class="item-info"><div class="item-name">Treasure Chest Game (Gerudo)</div><div class="item-detail">Encuentra el cofre correcto entre varios usando pistas visuales. Premio: Piece of Heart o Rupias grandes.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- #content -->
+
+  <div id="tabs">
+    <div class="tab active" id="tab-guia" onclick="showScreen('guia')">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Guía</span>
+    </div>
+    <div class="tab" id="tab-templos" onclick="showScreen('templos')">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      <span>Templos</span>
+    </div>
+    <div class="tab" id="tab-side" onclick="showScreen('side')">
+      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      <span>Sidequests</span>
+    </div>
+    <div class="tab" id="tab-items" onclick="showScreen('items')">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span>Items</span>
+    </div>
+    <div class="tab" id="tab-tracker" onclick="showScreen('tracker')">
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Tracker</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const HEART_PIECES={
+  bosque:[
+    {id:'hp01',name:'Skull Kids del tronco (juego de notas)',desc:'Niño · Bajo la escalera donde está el minijuego de Tirachinas, repite las 3 rondas de notas con los Skull Kids.'},
+    {id:'hp02',name:'Skull Kid de la Canción de Saria',desc:'Niño · Tras aprender la canción de Saria, ve a la izquierda en Lost Woods y tócasela al Skull Kid del tronco.'},
+    {id:'hp03',name:'Hueco del establo · Lon Lon Ranch',desc:'Niño · En el granero trasero, mueve las cajas hasta el rincón y cruza el hueco en la pared.'},
+    {id:'hp04',name:'Magic Bean · entrada Dodongo&#39;s Cavern',desc:'Niño/Adulto · Pieza arriba de la entrada. De Niño con backflip cargando Z, o planta un Magic Bean y vuelve de Adulto.'},
+  ],
+  hyrule:[
+    {id:'hp05',name:'Perro perdido del Mercado',desc:'Niño/Noche · Encuentra al perro blanco en el Mercado y llévalo a la mujer del callejón trasero.'},
+    {id:'hp06',name:'Juego del cofre del tesoro',desc:'Niño/Noche · En la tienda de cofres del Mercado, usa el Lente de la Verdad para acertar el cofre correcto.'},
+    {id:'hp07',name:'Bombchu Bowling',desc:'Niño · Minijuego de boliche con Bombchus en el Mercado — una de las rondas de premios incluye Pieza de Corazón.'},
+    {id:'hp08',name:'Foso de Hyrule Field (zona cercada)',desc:'Niño/Adulto · Pon una bomba en el área cercada cerca de la entrada a Lago Hylia para revelar un agujero con Deku Scrub vendedor.'},
+    {id:'hp09',name:'Carrera de obstáculos · Lon Lon Ranch',desc:'Adulto · Salta las vallas a caballo con Epona dentro del tiempo límite.'},
+    {id:'hp10',name:'Tiro con arco a caballo (1000 pts)',desc:'Adulto · Minijuego de Malon en Lon Lon Ranch — consigue 1000 puntos disparando dianas montado en Epona.'},
+  ],
+  kakariko:[
+    {id:'hp11',name:'Excavación de Dampé',desc:'Niño/Noche · Paga 10 Rupias por turno para que Dampé cave en el Cementerio hasta encontrar la pieza (es aleatorio).'},
+    {id:'hp12',name:'Tumba con ReDead + la Canción del Sol',desc:'Niño/Noche · Mueve la segunda lápida desde la derecha en la fila superior, baja, derrota al ReDead y toca la Canción del Sol junto al mural.'},
+    {id:'hp13',name:'Búho de Death Mountain → tejado',desc:'Niño/Adulto · El búho te deja en un tejado de Kakariko; entra por el hueco hacia el corral de la vaca.'},
+    {id:'hp14',name:'Carrera de Dampé bajo tierra',desc:'Adulto · En la tumba de Dampé (Adulto), corre tras su fantasma por el túnel sin que te encierren las puertas.'},
+    {id:'hp15',name:'Hombre del tejado junto al molino',desc:'Adulto · Usa el Hookshot/Longshot para llegar al tejado cerca del molino y habla con el hombre sentado.'},
+    {id:'hp16',name:'50 Gold Skulltulas',desc:'Niño/Adulto · Entrega 50 tokens de Skulltula dorada en la Casa de los Hermanos Skulltula.'},
+  ],
+  goron:[
+    {id:'hp17',name:'Jarrón giratorio de Goron City',desc:'Niño/Adulto · Enciende las 4 antorchas del piso bajo y lanza una bomba al jarrón giratorio cuando la cara feliz mire a cámara.'},
+    {id:'hp18',name:'Pared escalable del Cráter',desc:'Niño/Adulto · Entra al Cráter desde arriba y desciende por la pared escalable hasta el hueco con la pieza.'},
+    {id:'hp19',name:'Gran Hada de la cima · sala extra',desc:'Adulto · Antes de tomar la Espada Maestra, corre dentro del cuarto detrás del búho (necesitas resistencia al calor) y cae para alcanzar la pieza sobre el borde.'},
+    {id:'hp20',name:'Magic Bean · pilar humeante del Cráter',desc:'Adulto · Tras aprender Bolero of Fire, monta el brote de Magic Bean plantado de Niño hasta la cima de uno de los pilares.'},
+  ],
+  zora:[
+    {id:'hp21',name:'Ranas y Song of Storms',desc:'Niño · Sube al tronco en el Río Zora y toca la Canción de la Tormenta para las 5 ranas.'},
+    {id:'hp22',name:'Minijuego musical de las ranas',desc:'Niño · Tras crecer las 5 ranas (tocando cada canción no-warp), gana su minijuego de ritmo atrapando insectos.'},
+    {id:'hp23',name:'Pieza sobre el risco · Boomerang',desc:'Niño · Cerca de la entrada al Dominio Zora hay una pieza en un saliente inalcanzable — engánchala con el Boomerang.'},
+    {id:'hp24',name:'Cinco antorchas del Dominio Zora',desc:'Niño/Adulto · Enciende las 5 antorchas del Dominio (incluidas las detrás de la cascada) con un Deku Stick para revelar el cofre.'},
+    {id:'hp25',name:'Plataformas de hielo · la Fuente Zora',desc:'Adulto · Tras el Templo del Agua, salta entre icebergs flotantes en la fuente helada hasta la pieza.'},
+    {id:'hp26',name:'Hielo rojo · Ice Cavern',desc:'Adulto · En la sala de estalactitas de la Ice Cavern, derrite el hielo rojo con Fuego Azul embotellado.'},
+  ],
+  lago:[
+    {id:'hp27',name:'Pez de 10 libras · estanque Niño',desc:'Niño · Pesca un pez de al menos 10 libras en el estanque y pésalo con el encargado.'},
+    {id:'hp28',name:'Fondo del Lakeside Laboratory',desc:'Adulto · Con la Escama Dorada, bucea hasta el fondo del tanque del laboratorio y habla con el científico.'},
+    {id:'hp29',name:'Techo del Lakeside Laboratory',desc:'Adulto · Sube al techo del laboratorio montando un Magic Bean o con la Canción del Espantapájaros.'},
+  ],
+  gerudo:[
+    {id:'hp30',name:'Cofre del risco · Gerudo Valley',desc:'Niño/Adulto · De Niño usa un Cucco para planear hasta el cofre en el risco opuesto; de Adulto, usa el Longshot.'},
+    {id:'hp31',name:'1000 puntos en tiro Gerudo (Adulto)',desc:'Adulto · Minijuego de tiro con arco detrás del Fuerte Gerudo — consigue al menos 1000 puntos.'},
+    {id:'hp32',name:'Cofre en el tejado del Fuerte',desc:'Adulto · Usa el Longshot o la Canción del Espantapájaros para llegar al tejado del Fuerte Gerudo y abrir el cofre.'},
+    {id:'hp33',name:'Magic Bean · Desert Colossus',desc:'Adulto · Planta el último Magic Bean frente al Templo del Espíritu de Niño; de Adulto, móntalo hasta el arco de piedra.'},
+  ]
+};
+
+const TEMPLOS=[
+  {id:'deku',name:'Árbol Deku',zone:'Bosque Kokiri · Niño'},
+  {id:'dodongo',name:"Caverna Dodongo's",zone:'Death Mountain · Niño'},
+  {id:'jabu',name:'Jabu-Jabu',zone:'Dominio Zora · Niño'},
+  {id:'bosque',name:'Templo del Bosque',zone:'Bosque Perdido · Adulto'},
+  {id:'fuego',name:'Templo de Fuego',zone:'Death Mountain Crater · Adulto'},
+  {id:'agua',name:'Templo del Agua',zone:'Lago Hylia · Adulto'},
+  {id:'sombras',name:'Templo de las Sombras',zone:'Kakariko · Adulto'},
+  {id:'espiritu',name:'Templo del Espíritu',zone:'Valle Gerudo · Adulto'},
+  {id:'ganon',name:'Castillo de Ganon',zone:'Final · Adulto'},
+];
+const CANCIONES=[
+  {id:'zelda',name:"Zelda's Lullaby",effect:'Abre puertas reales'},
+  {id:'epona',name:"Epona's Song",effect:'Llama a Epona'},
+  {id:'saria',name:"Saria's Song",effect:'Llama a Saria/Darunia'},
+  {id:'sun',name:"Sun's Song",effect:'Cambia día/noche'},
+  {id:'time',name:'Song of Time',effect:'Abre Puerta del Tiempo'},
+  {id:'storms',name:'Song of Storms',effect:'Invoca lluvia'},
+  {id:'minuet',name:'Minuet of Forest',effect:'Teletransporte Bosque'},
+  {id:'bolero',name:'Bolero of Fire',effect:'Teletransporte Fuego'},
+  {id:'serenade',name:'Serenade of Water',effect:'Teletransporte Agua'},
+  {id:'nocturne',name:'Nocturne of Shadow',effect:'Teletransporte Sombras'},
+  {id:'requiem',name:'Requiem of Spirit',effect:'Teletransporte Espíritu'},
+  {id:'prelude',name:'Prelude of Light',effect:'Teletransporte Templo Tiempo'},
+];
+const PIEDRAS=[
+  {id:'esmeralda',name:'Esmeralda Kokiri',zone:'Árbol Deku'},
+  {id:'rubi',name:'Rubí Goron',zone:'Ciudad Goron'},
+  {id:'zafiro',name:'Zafiro Zora',zone:'Dominio Zora'},
+  {id:'med_bosque',name:'Medallón del Bosque',zone:'Templo del Bosque'},
+  {id:'med_fuego',name:'Medallón de Fuego',zone:'Templo de Fuego'},
+  {id:'med_agua',name:'Medallón del Agua',zone:'Templo del Agua'},
+  {id:'med_sombras',name:'Medallón de las Sombras',zone:'Templo de las Sombras'},
+  {id:'med_espiritu',name:'Medallón del Espíritu',zone:'Templo del Espíritu'},
+  {id:'med_luz',name:'Medallón de la Luz',zone:'Templo del Tiempo'},
+];
+
+function loadState(){try{return JSON.parse(localStorage.getItem('zelda_oot_v1')||'{}')}catch(e){return{}}}
+function saveState(s){localStorage.setItem('zelda_oot_v1',JSON.stringify(s))}
+let state=loadState();
+if(!state.templos)state.templos={};
+if(!state.canciones)state.canciones={};
+if(!state.piedras)state.piedras={};
+if(!state.story)state.story={};
+if(!state.hearts)state.hearts={};
+
+function toggleStory(id){
+  state.story[id]=!state.story[id];
+  const box=document.getElementById('sc-box-'+id);
+  const wrap=document.getElementById('sc-wrap-'+id);
+  if(box)box.classList.toggle('checked',state.story[id]);
+  if(wrap)wrap.classList.toggle('done',state.story[id]);
+  saveState(state);
+  updateStats();
+}
+function restoreStoryChecks(){
+  Object.keys(state.story).forEach(id=>{
+    if(!state.story[id])return;
+    const box=document.getElementById('sc-box-'+id);
+    const wrap=document.getElementById('sc-wrap-'+id);
+    if(box)box.classList.add('checked');
+    if(wrap)wrap.classList.add('done');
+  });
+}
+function renderHeartZone(zoneKey,containerId){
+  const list=HEART_PIECES[zoneKey];
+  document.getElementById(containerId).innerHTML=list.map(h=>`
+    <div class="heart-item ${state.hearts[h.id]?'checked':''}" id="hi-${h.id}" onclick="toggleHeart('${h.id}')">
+      <div class="heart-checkbox ${state.hearts[h.id]?'checked':''}" id="hb-${h.id}"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="heart-content"><div class="heart-name">${h.name}</div><div class="heart-desc">${h.desc}</div></div>
+    </div>`).join('');
+}
+function renderAllHeartZones(){
+  renderHeartZone('bosque','hp-bosque');
+  renderHeartZone('hyrule','hp-hyrule');
+  renderHeartZone('kakariko','hp-kakariko');
+  renderHeartZone('goron','hp-goron');
+  renderHeartZone('zora','hp-zora');
+  renderHeartZone('lago','hp-lago');
+  renderHeartZone('gerudo','hp-gerudo');
+}
+function toggleHeart(id){
+  state.hearts[id]=!state.hearts[id];
+  const item=document.getElementById('hi-'+id);
+  const box=document.getElementById('hb-'+id);
+  if(item)item.classList.toggle('checked',state.hearts[id]);
+  if(box)box.classList.toggle('checked',state.hearts[id]);
+  saveState(state);
+}
+
+function renderTemploList(){
+  document.getElementById('templo-list').innerHTML=TEMPLOS.map(t=>`
+    <div class="tracker-item" onclick="toggleTemplo('${t.id}')">
+      <div class="tracker-label"><div class="tracker-name">${t.name}</div><div class="tracker-sub">${t.zone}</div></div>
+      <div class="toggle ${state.templos[t.id]?'on':''}" id="ttp-${t.id}"><div class="toggle-knob"></div></div>
+    </div>`).join('');
+}
+function renderCancionList(){
+  document.getElementById('cancion-list').innerHTML=CANCIONES.map(c=>`
+    <div class="tracker-item" onclick="toggleCancion('${c.id}')">
+      <div class="tracker-label"><div class="tracker-name">${c.name}</div><div class="tracker-sub">${c.effect}</div></div>
+      <div class="toggle ${state.canciones[c.id]?'on':''}" id="tcn-${c.id}"><div class="toggle-knob"></div></div>
+    </div>`).join('');
+}
+function renderPiedraList(){
+  document.getElementById('piedra-list').innerHTML=PIEDRAS.map(p=>`
+    <div class="tracker-item" onclick="togglePiedra('${p.id}')">
+      <div class="tracker-label"><div class="tracker-name">${p.name}</div><div class="tracker-sub">${p.zone}</div></div>
+      <div class="toggle ${state.piedras[p.id]?'on':''}" id="tpd-${p.id}"><div class="toggle-knob"></div></div>
+    </div>`).join('');
+}
+function toggleTemplo(id){state.templos[id]=!state.templos[id];const t=document.getElementById('ttp-'+id);if(t)t.classList.toggle('on',state.templos[id]);saveState(state);updateStats()}
+function toggleCancion(id){state.canciones[id]=!state.canciones[id];const t=document.getElementById('tcn-'+id);if(t)t.classList.toggle('on',state.canciones[id]);saveState(state);updateStats()}
+function togglePiedra(id){state.piedras[id]=!state.piedras[id];const t=document.getElementById('tpd-'+id);if(t)t.classList.toggle('on',state.piedras[id]);saveState(state);updateStats()}
+function updateStats(){
+  document.getElementById('stat-story').textContent=Object.values(state.story).filter(Boolean).length+'/11';
+  document.getElementById('stat-templos').textContent=Object.values(state.templos).filter(Boolean).length;
+  document.getElementById('stat-canciones').textContent=Object.values(state.canciones).filter(Boolean).length;
+}
+
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+function showGuide(name,btn){
+  document.querySelectorAll('.guide-section').forEach(s=>s.style.display='none');
+  document.getElementById('gs-'+name).style.display='block';
+  document.querySelectorAll('#screen-guia .subnav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function showItems(name,btn){
+  document.querySelectorAll('.items-tab').forEach(s=>s.style.display='none');
+  document.getElementById('items-'+name).style.display='block';
+  document.querySelectorAll('#screen-items .subnav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function showSide(name,btn){
+  document.querySelectorAll('.side-tab').forEach(s=>s.style.display='none');
+  document.getElementById('side-'+name).style.display='block';
+  document.querySelectorAll('#screen-side .subnav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function showTracker(name,btn){
+  document.querySelectorAll('.tracker-tab').forEach(s=>s.style.display='none');
+  document.getElementById('tracker-'+name).style.display='block';
+  document.querySelectorAll('#screen-tracker .subnav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleArea(titleEl){
+  titleEl.classList.toggle('open');
+  titleEl.nextElementSibling.classList.toggle('open');
+}
+
+renderTemploList();renderCancionList();renderPiedraList();updateStats();
+restoreStoryChecks();
+renderAllHeartZones();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "Ocarina of Time — Guía",
+  "short_name": "Ocarina",
+  "description": "Guía completa y tracker de progreso para Legend of Zelda: Ocarina of Time",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0a1612",
+  "theme_color": "#0a1612",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
